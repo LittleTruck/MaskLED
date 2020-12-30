@@ -4,11 +4,92 @@
 	</head>
 	<body>
 	
-	<!-- in the <button> tags below the ID attribute is the value sent to the arduino -->
-	
-	<button id="11" class="led">Toggle Pin 11</button> <!-- button for pin 11 -->
-	<button id="12" class="led">Toggle Pin 12</button> <!-- button for pin 12 -->
-	<button id="13" class="led">Toggle Pin 13</button> <!-- button for pin 13 -->7788910111
+	<table>
+		<tr>
+			<td><button id="11" class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+		</tr>
+		<tr>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+		</tr>
+		<tr>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+		</tr>
+		<tr>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+		</tr>
+		<tr>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+		</tr>
+		<tr>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+		</tr>
+		<tr>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+		</tr>
+		<tr>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+			<td><button class="led" >c</button></td>
+		</tr>
+	</table>
+
+	<button class="button-change">Sensor偵測</button>
+	<button class="button-change">網頁控制</button>
+	<button class="button-change">清空</button>
 		
 	<script src="jquery.min.js"></script>
 	<script type="text/javascript">
@@ -22,3 +103,127 @@
 	</script>
 	</body>
 </html>
+
+<style>
+	body{
+		background-color: black;
+		text-align:center;
+	}
+	table {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+
+	}
+	:focus{
+		outline: 0;
+	}
+	.button-change{
+		margin-top: 100px;
+		display:inline-block;
+		justify-content: center;
+		text-align: center;
+		position: relative;
+		padding: 10px 16px;
+		color: white;
+		background-color: transparent;
+		border: solid 1px white;
+		font-size: 20px;
+		text-transform: uppercase;
+		transition: 1.5s;
+	}
+	.button-change:hover {
+		cursor: pointer;
+		color: black;
+		background-color: #84C1FF;
+		box-shadow: 0 0 5px #84C1FF, 0 0 25px #84C1FF, 0 0 50px #84C1FF, 0 0 250px #84C1FF;
+	}
+
+	.button-change::before {
+		content: "";
+		width: 0%;
+		height: 0%;
+		position: absolute;
+		bottom: -1px;
+		right: -1px;
+		transition: 1s;
+	}
+
+	.button-change:hover::before {
+		width: 100%;
+		height: 100%;
+		border-bottom: 2px solid #84C1FF;
+		border-right: 2px solid #84C1FF;
+	}
+
+	.button-change::after {
+		content: "";
+		width: 0;
+		height: 0;
+		position: absolute;
+		top: -1px;
+		left: -1px;
+		transition: 1s;
+	}
+
+	.button-change:hover::after {
+		width: 100%;
+		height: 100%;
+		border-top: 2px solid #84C1FF;
+		border-left: 2px solid #84C1FF;
+	}
+	.led {
+		/*     width:50px;
+            height:50px; */
+		position: relative;
+		padding: 10px 16px;
+		/*     margin: 64px 64px; */
+		color: white;
+		background-color: transparent;
+		border: solid 1px white;
+		font-size: 32px;
+		text-transform: uppercase;
+		transition: 1.5s;
+	}
+
+	.led:hover {
+		cursor: pointer;
+		color: black;
+		background-color: #FF9900;
+		box-shadow: 0 0 5px #FF9900, 0 0 25px #FF9900, 0 0 50px #FF9900, 0 0 250px #FF9900;
+	}
+
+	.led::before {
+		content: "";
+		width: 0%;
+		height: 0%;
+		position: absolute;
+		bottom: -1px;
+		right: -1px;
+		transition: 1s;
+	}
+
+	.led:hover::before {
+		width: 100%;
+		height: 100%;
+		border-bottom: 2px solid #FF9900;
+		border-right: 2px solid #FF9900;
+	}
+
+	.led::after {
+		content: "";
+		width: 0;
+		height: 0;
+		position: absolute;
+		top: -1px;
+		left: -1px;
+		transition: 1s;
+	}
+
+	.led:hover::after {
+		width: 100%;
+		height: 100%;
+		border-top: 2px solid #FF9900;
+		border-left: 2px solid #FF9900;
+	}
+</style>
