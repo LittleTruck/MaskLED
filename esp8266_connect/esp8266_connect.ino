@@ -11,8 +11,8 @@
 
 Timer t;
 SoftwareSerial debug(3, 2);  // RX, TX // make RX Arduino line is pin 4, make TX Arduino line is pin 5.
-#define SSID "Galaxy Note10c85a"
-#define PASS "zcnf8107"
+#define SSID "modism cafe"
+#define PASS "28837012"
 
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 #define DELAYVAL 500
