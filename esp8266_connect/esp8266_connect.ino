@@ -11,21 +11,21 @@
 
 Timer t;
 SoftwareSerial debug(3, 2);  // RX, TX // make RX Arduino line is pin 4, make TX Arduino line is pin 5.
-#define SSID "Galaxy Note10c85a"
-#define PASS "zcnf8107"
+//#define SSID "Galaxy Note10c85a"
+//#define PASS "zcnf8107"
 
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 #define DELAYVAL 500
 char input = '0';
 char old = '0';
+int mode = 1;
 
 const int FLEX_PIN = A0; // Pin connected to voltage divider output
 const float VCC = 4.98; // Measured voltage of Ardunio 5V line
-const float R_DIV = 47500.0; 
+const float R_DIV = 47500.0;
 
 const float STRAIGHT_RESISTANCE = 37300.0; // resistance when straight
 const float BEND_RESISTANCE = 90000.0; // resistance at 90 deg
-
 
 void setup() {
   Serial.begin(115200);
@@ -33,26 +33,201 @@ void setup() {
     ;
   }
   debug.begin(115200); // your esp's baud rate might be different
-  //  pinMode(10,OUTPUT);
-  //  digitalWrite(10,LOW);
-  //  pinMode(11,OUTPUT);
-  //  digitalWrite(11,LOW);
-  //  pinMode(12,OUTPUT);
-  //  digitalWrite(12,LOW);
   t.every(500, Wifi_main);
 
 #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
   clock_prescale_set(clock_div_1);
 #endif
-  Serial.begin(9600);
+  //  Serial.begin(9600);
   pixels.begin();
   pixels.setBrightness(60);
-  
+
   pinMode(FLEX_PIN, INPUT);
 }
-void loop() {
-  t.update();
 
+void loop() {
+  //  if (debug.available()) {
+  //      Serial.println("****************Switch mode**************");
+  //
+  //      debug.read();
+  //      // the ASCII decimal value and 0 (the first decimal number) starts at 4
+  //      if(debug.find("mode=")){
+  //        sensor = debug.read() - 48;
+  //      }
+  //  }
+  //
+  //  if(senor){
+  //    sen.update();
+  //  }
+  t.update();
+}
+
+
+int Wifi_State = 2, delaytime;
+String cmd;
+
+void Wifi_main() {
+  Serial.print(Wifi_State);
+  switch (Wifi_State) {
+    case 0://--------------------------------------------------Test Wifi Module
+      {
+        sendDebug("AT+RST");
+        sendDebug("AT");
+        if (Loding("Sent AT")) {
+          Wifi_State++;
+        }
+        break;
+      }
+
+    case 1://--------------------------------------------------Wifi Mode
+      {
+        sendDebug("AT+CWMODE=3");
+        if (Loding("AT+CWMODE=3")) {
+          Wifi_State++;
+        }
+        break;
+      }
+
+    case 2://--------------------------------------------------Wifi connect
+      {
+        cmd = "AT+CWJAP=\"";
+        cmd += "Galaxy Note10c85a";
+        cmd += "\",\"";
+        cmd += "zcnf8107";
+        cmd += "\"";
+        sendDebug(cmd);
+        Wifi_State++;
+        if (Loding("Wifi connect")) {
+          Wifi_State++; //next setting wifi mode
+        }
+        else {
+          Wifi_State--;
+        }
+        break;
+      }
+    case 3://--------------------------------------------------Get ip address 數據機"http://192.168.0.6:8888/"  手機熱點" http://172.20.10.8:8888/pin="  <=== ip
+      {
+        sendDebug("AT+CIFSR");
+        //      if (Loding("Get ip address")){ //delay 1 sec
+        Wifi_State++; //next setting wifi mode
+        //      }
+        //      else{Wifi_State--;}
+        break;
+      }
+
+    case 4://--------------------------------------------------configure for multiple connections
+      {
+        sendDebug("AT+CIPMUX=1");
+        //      if (Loding("Set CIPMUX")){
+        Wifi_State++; //next setting wifi mode
+        //      }
+        //      else{Wifi_State--;}
+        break;
+      }
+
+    case 5://--------------------------------------------------turn on server on port 8888
+      {
+        sendDebug("AT+CIPSERVER=1,8888");
+        Wifi_State += 2; //next setting wifi mode
+        break;
+      }
+
+    case 6:// check if the esp is sending a message
+      {
+        if (debug.available()) {
+          if (debug.find("+IPD,")) {
+            if (debug.find("mode=")) {
+              Serial.println("****************Switch mode**************");
+              mode = debug.read() - 48;
+              Serial.println(mode);
+              pixels.clear();
+              pixels.show();
+            }
+          }
+        }
+        if (mode == 1) {
+          Wifi_State++;
+        } else {
+          Wifi_State++;
+          Wifi_State++;
+        }
+        break;
+      }
+
+    case 7://sensor控制
+      {
+        Serial.println("~ ~ ~ ~ ~ ~ ~ ~sensor~ ~ ~ ~ ~ ~ ~ ~");
+
+        int flexADC = analogRead(FLEX_PIN);
+        float flexV = flexADC * VCC / 1023.0;
+        float flexR = R_DIV * (VCC / flexV - 1.0);
+        Serial.println("Resistance: " + String(flexR) + " ohms");
+
+        // Use the calculated resistance to estimate the sensor's
+        // bend angle:
+        float angle = map(flexR, STRAIGHT_RESISTANCE, BEND_RESISTANCE,
+                          0, 90.0);
+        Serial.println("-------------Bend: " + String(angle) + " degrees-------------");
+        Serial.println();
+        if (angle < 200) {
+          Serial.print("no face");
+          controlLED('0');
+        } else {
+          Serial.print("smile");
+          controlLED('s');
+        }
+        delay(50);
+        Wifi_State--;
+        break;
+      }
+
+    case 8://web控制
+      {
+        Serial.print("web");
+
+        if (debug.available()) {
+          if (debug.find("+IPD,")) {
+            delay(10);
+            debug.read();
+            debug.find("pin=");
+
+            int pinNumber = (debug.read() - 48) * 10; // get first number i.e. if the pin 13 then the 1st number is 1, then multiply to get 10
+            pinNumber += (debug.read() - 48); // get second number, i.e. if the pin number is 13 then the 2nd number is 3, then add to the first number
+
+            Serial.println("??????????????????????????");
+
+            if (pinNumber == 64) {
+              pixels.clear();
+              pixels.show();
+              Wifi_State -= 2;
+              break;
+            }
+
+            pixels.setPixelColor(pinNumber, pixels.Color(0, 150, 0));
+            pixels.show();
+
+            //        digitalWrite(pinNumber, !digitalRead(pinNumber)); // toggle pin
+            // make close command
+
+            String closeCommand = "AT+CIPCLOSE=";
+            closeCommand += pinNumber; // append connection id
+            closeCommand += "\r\n";
+            Serial.print("Turn Pin");
+            Serial.print(pinNumber);
+            Serial.print(":");
+            //          Serial.print(digitalRead(pinNumber));
+            Serial.println("!");
+            sendDebug(closeCommand); // close connection
+          }
+        }
+
+        delay(500);
+        break;
+      }
+  }
+}
+
+void Sensor_mode() {
   int flexADC = analogRead(FLEX_PIN);
   float flexV = flexADC * VCC / 1023.0;
   float flexR = R_DIV * (VCC / flexV - 1.0);
@@ -61,102 +236,19 @@ void loop() {
   // Use the calculated resistance to estimate the sensor's
   // bend angle:
   float angle = map(flexR, STRAIGHT_RESISTANCE, BEND_RESISTANCE,
-                   0, 90.0);
-  Serial.println("Bend: " + String(angle) + " degrees");
+                    0, 90.0);
+  Serial.println("-------------Bend: " + String(angle) + " degrees-------------");
   Serial.println();
-  if(angle < 200){
+  if (angle < 200) {
     Serial.print("no face");
     controlLED('0');
-  }else{
+  } else {
     Serial.print("smile");
     controlLED('s');
   }
   delay(800);
 }
-int Wifi_State, delaytime;
-String cmd;
-void Wifi_main() {
-  switch (Wifi_State) {
-    case 0://--------------------------------------------------Test Wifi Module
-      sendDebug("AT+RST");
-      sendDebug("AT");
-      if (Loding("Sent AT")) {
-        Wifi_State++;
-      }
-      break;
-    case 1://--------------------------------------------------Wifi Mode
-      sendDebug("AT+CWMODE=3");
-      if (Loding("AT+CWMODE=3")) {
-        Wifi_State++;
-      }
-      break;
-    case 2://--------------------------------------------------Wifi connect
-      cmd = "AT+CWJAP=\"";
-      cmd += SSID;
-      cmd += "\",\"";
-      cmd += PASS;
-      cmd += "\"";
-      sendDebug(cmd);
-      Wifi_State++;
-      if (Loding("Wifi connect")) {
-        Wifi_State++; //next setting wifi mode
-      }
-      else {
-        Wifi_State--;
-      }
-      break;
-    case 3://--------------------------------------------------Get ip address 數據機"http://192.168.0.6:8888/"  手機熱點" http://172.20.10.8:8888/pin="  <=== ip
-      sendDebug("AT+CIFSR");
-      //      if (Loding("Get ip address")){ //delay 1 sec
-      Wifi_State++; //next setting wifi mode
-      //      }
-      //      else{Wifi_State--;}
-      break;
-    case 4://--------------------------------------------------configure for multiple connections
-      sendDebug("AT+CIPMUX=1");
-      //      if (Loding("Set CIPMUX")){
-      Wifi_State++; //next setting wifi mode
-      //      }
-      //      else{Wifi_State--;}
-      break;
-    case 5://--------------------------------------------------turn on server on port 8888
-      sendDebug("AT+CIPSERVER=1,8888");
-      Wifi_State++; //next setting wifi mode
-      break;
-    case 6:// check if the esp is sending a message
-      if (debug.available()) {
-        if (debug.find("+IPD,")) {
-          Serial.println("Get webpage signal, analyzing...");
-          Wifi_State++;
-        }
-      }
-      break;
-    case 7:// wait for the serial buffer to fill up (read all the serial data)
-      delay(10);
-      int connectionId = debug.read() - 48; // subtract 48 because the read() function returns
-      // the ASCII decimal value and 0 (the first decimal number) starts at 4
-      debug.find("pin="); // advance cursor to "pin="
-      int pinNumber = (debug.read() - 48) * 10; // get first number i.e. if the pin 13 then the 1st number is 1, then multiply to get 10
-      pinNumber += (debug.read() - 48); // get second number, i.e. if the pin number is 13 then the 2nd number is 3, then add to the first number
 
-      pixels.setPixelColor(pinNumber, pixels.Color(0, 150, 0));
-      pixels.show();
-
-      //        digitalWrite(pinNumber, !digitalRead(pinNumber)); // toggle pin
-      // make close command
-      String closeCommand = "AT+CIPCLOSE=";
-      closeCommand += connectionId; // append connection id
-      closeCommand += "\r\n";
-      Serial.print("Turn Pin");
-      Serial.print(pinNumber);
-      Serial.print(":");
-      Serial.print(digitalRead(pinNumber));
-      Serial.println("!");
-      sendDebug(closeCommand); // close connection
-      Wifi_State--; //next setting wifi mode
-      break;
-  }
-}
 String get_response() {  //get esp responce without "Serial.find()".
   String response = "";
   char c;

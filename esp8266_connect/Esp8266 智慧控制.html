@@ -87,8 +87,8 @@
 		</tr>
 	</table>
 
-	<button class="button-change">Sensor偵測</button>
-	<button class="button-change">網頁控制</button>
+	<button class="button-change" onclick="switchToSensor()">Sensor偵測</button>
+	<button class="button-change" onclick="switchToWeb()">網頁控制</button>
 	<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 	<button class="button-change" onclick="clearLED()">清空</button>
 		
@@ -99,20 +99,26 @@
 				var p = $(this).attr('id'); // get id value (i.e. pin13, pin12, or pin11)
 				$("#"+p).addClass('after-click');
 				
-				// document.$(this).attr('id').style.color = "red";
-				// send HTTP GET request to the IP address with the parameter "pin" and value "p", then execute the function
-                $.get("http://192.168.31.226:8888/", {pin:p}); // execute get request
+				$.get("http://192.168.43.244:8888/", {pin:p}); // execute get request
 
-					// $('#menu_title').find('button').click(function () {
-					// 	$('#menu_title').find('button').removeClass('cur');
-					// 	$(this).addClass('cur');
-					// })
 			});
 		});
 
+		function switchToSensor(){
+			// $(".after-click").removeClass("after-click");
+			$.get("http://192.168.43.244:8888/", {mode:1}); // execute get request
+		}
+
+		function switchToWeb(){
+			// $(".after-click").removeClass("after-click");
+			$.get("http://192.168.43.244:8888/", {mode:0}); // execute get request
+		}
+		
 		function clearLED(){
 			$(".after-click").removeClass("after-click");
+			$.get("http://192.168.43.244:8888/", {pin:64}); // execute get request
 		}
+
 	</script>
 	</body>
 </html>
