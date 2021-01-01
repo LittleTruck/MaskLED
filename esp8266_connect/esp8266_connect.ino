@@ -11,13 +11,20 @@
 
 Timer t;
 SoftwareSerial debug(3, 2);  // RX, TX // make RX Arduino line is pin 4, make TX Arduino line is pin 5.
-#define SSID "modism cafe"
-#define PASS "28837012"
+#define SSID "Galaxy Note10c85a"
+#define PASS "zcnf8107"
 
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 #define DELAYVAL 500
 char input = '0';
 char old = '0';
+
+const int FLEX_PIN = A0; // Pin connected to voltage divider output
+const float VCC = 4.98; // Measured voltage of Ardunio 5V line
+const float R_DIV = 47500.0; 
+
+const float STRAIGHT_RESISTANCE = 37300.0; // resistance when straight
+const float BEND_RESISTANCE = 90000.0; // resistance at 90 deg
 
 
 void setup() {
@@ -40,9 +47,31 @@ void setup() {
   Serial.begin(9600);
   pixels.begin();
   pixels.setBrightness(60);
+  
+  pinMode(FLEX_PIN, INPUT);
 }
 void loop() {
   t.update();
+
+  int flexADC = analogRead(FLEX_PIN);
+  float flexV = flexADC * VCC / 1023.0;
+  float flexR = R_DIV * (VCC / flexV - 1.0);
+  Serial.println("Resistance: " + String(flexR) + " ohms");
+
+  // Use the calculated resistance to estimate the sensor's
+  // bend angle:
+  float angle = map(flexR, STRAIGHT_RESISTANCE, BEND_RESISTANCE,
+                   0, 90.0);
+  Serial.println("Bend: " + String(angle) + " degrees");
+  Serial.println();
+  if(angle < 200){
+    Serial.print("no face");
+    controlLED('0');
+  }else{
+    Serial.print("smile");
+    controlLED('s');
+  }
+  delay(800);
 }
 int Wifi_State, delaytime;
 String cmd;
@@ -178,7 +207,7 @@ void sendDebug(String sent_cmd)
 }
 
 
-void controlLED()
+void controlLED(char input)
 {
   pixels.clear();
   old = input;

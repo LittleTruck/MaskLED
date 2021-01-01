@@ -90,17 +90,29 @@
 	<button class="button-change">Sensor偵測</button>
 	<button class="button-change">網頁控制</button>
 	<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-	<button class="button-change">清空</button>
+	<button class="button-change" onclick="clearLED()">清空</button>
 		
 	<script src="jquery.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$(".led").click(function(){
 				var p = $(this).attr('id'); // get id value (i.e. pin13, pin12, or pin11)
+				$("#"+p).addClass('after-click');
+				
+				// document.$(this).attr('id').style.color = "red";
 				// send HTTP GET request to the IP address with the parameter "pin" and value "p", then execute the function
                 $.get("http://192.168.31.226:8888/", {pin:p}); // execute get request
+
+					// $('#menu_title').find('button').click(function () {
+					// 	$('#menu_title').find('button').removeClass('cur');
+					// 	$(this).addClass('cur');
+					// })
 			});
 		});
+
+		function clearLED(){
+			$(".after-click").removeClass("after-click");
+		}
 	</script>
 	</body>
 </html>
@@ -226,5 +238,15 @@
 		height: 100%;
 		border-top: 2px solid #FF9900;
 		border-left: 2px solid #FF9900;
+	}
+
+	.after-click{
+		color: black;
+		background-color: #FF9900;
+		box-shadow: 0 0 5px #FF9900, 0 0 25px #FF9900, 0 0 50px #FF9900, 0 0 250px #FF9900;
+		border-top: 2px solid #FF9900;
+		border-left: 2px solid #FF9900;
+		border-bottom: 2px solid #FF9900;
+		border-right: 2px solid #FF9900;
 	}
 </style>
