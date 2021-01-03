@@ -194,8 +194,6 @@ void Wifi_main() {
             int pinNumber = (debug.read() - 48) * 10; // get first number i.e. if the pin 13 then the 1st number is 1, then multiply to get 10
             pinNumber += (debug.read() - 48); // get second number, i.e. if the pin number is 13 then the 2nd number is 3, then add to the first number
 
-            Serial.println("??????????????????????????");
-
             if (pinNumber == 64) {
               pixels.clear();
               pixels.show();
@@ -366,31 +364,53 @@ void controlLED(char input)
     case 'a':
       Serial.print(input);
       Serial.println(": angry");
-      pixels.setPixelColor(41, pixels.Color(0, 150, 0));
-      pixels.setPixelColor(37, pixels.Color(0, 150, 0));
-      pixels.setPixelColor(27, pixels.Color(0, 150, 0));
-      pixels.setPixelColor(19, pixels.Color(0, 150, 0));
-      pixels.setPixelColor(29, pixels.Color(0, 150, 0));
-      pixels.setPixelColor(33, pixels.Color(0, 150, 0));
-      pixels.setPixelColor(47, pixels.Color(0, 150, 0));
+
+      pixels.clear();
+      pixels.setPixelColor(41, pixels.Color(240, 67, 67));
+      pixels.setPixelColor(37, pixels.Color(240, 67, 67));
+      pixels.setPixelColor(27, pixels.Color(240, 67, 67));
+      pixels.setPixelColor(19, pixels.Color(240, 67, 67));
+      pixels.setPixelColor(29, pixels.Color(240, 67, 67));
+      pixels.setPixelColor(33, pixels.Color(240, 67, 67));
+      pixels.setPixelColor(47, pixels.Color(240, 67, 67));
+
       pixels.show();
+      delay(500);
+      //      pixels.show();
       break;
 
     case '0':
-      pixels.setPixelColor(22, pixels.Color(0, 150, 0));
-      pixels.setPixelColor(10, pixels.Color(0, 150, 0));
-      pixels.setPixelColor(11, pixels.Color(0, 150, 0));
-      pixels.setPixelColor(12, pixels.Color(0, 150, 0));
-      pixels.setPixelColor(18, pixels.Color(0, 150, 0));
-      pixels.setPixelColor(29, pixels.Color(0, 150, 0));
-      pixels.setPixelColor(35, pixels.Color(0, 150, 0));
-      pixels.setPixelColor(36, pixels.Color(0, 150, 0));
-      pixels.setPixelColor(45, pixels.Color(0, 150, 0));
-      pixels.setPixelColor(50, pixels.Color(0, 150, 0));
-      pixels.setPixelColor(60, pixels.Color(0, 150, 0));
-      pixels.setPixelColor(59, pixels.Color(0, 150, 0));
-      pixels.setPixelColor(58, pixels.Color(0, 150, 0));
-      pixels.setPixelColor(54, pixels.Color(0, 150, 0));
+
+      pixels.setPixelColor(25, pixels.Color(246, 201, 134));
+      pixels.setPixelColor(26, pixels.Color(246, 201, 134));
+      pixels.setPixelColor(27, pixels.Color(255, 188, 188));
+      pixels.setPixelColor(28, pixels.Color(255, 188, 188));
+      pixels.setPixelColor(29, pixels.Color(188, 255, 255));
+      pixels.setPixelColor(30, pixels.Color(188, 255, 255));
+      pixels.setPixelColor(38, pixels.Color(246, 201, 134));
+      pixels.setPixelColor(37, pixels.Color(246, 201, 134));
+      pixels.setPixelColor(36, pixels.Color(255, 188, 188));
+      pixels.setPixelColor(35, pixels.Color(255, 188, 188));
+      pixels.setPixelColor(34, pixels.Color(188, 255, 255));
+      pixels.setPixelColor(33, pixels.Color(188, 255, 255));
+
+
+
+
+      //      pixels.setPixelColor(22, pixels.Color(0, 150, 0));
+      //      pixels.setPixelColor(10, pixels.Color(0, 150, 0));
+      //      pixels.setPixelColor(11, pixels.Color(0, 150, 0));
+      //      pixels.setPixelColor(12, pixels.Color(0, 150, 0));
+      //      pixels.setPixelColor(18, pixels.Color(0, 150, 0));
+      //      pixels.setPixelColor(29, pixels.Color(0, 150, 0));
+      //      pixels.setPixelColor(35, pixels.Color(0, 150, 0));
+      //      pixels.setPixelColor(36, pixels.Color(0, 150, 0));
+      //      pixels.setPixelColor(45, pixels.Color(0, 150, 0));
+      //      pixels.setPixelColor(50, pixels.Color(0, 150, 0));
+      //      pixels.setPixelColor(60, pixels.Color(0, 150, 0));
+      //      pixels.setPixelColor(59, pixels.Color(0, 150, 0));
+      //      pixels.setPixelColor(58, pixels.Color(0, 150, 0));
+      //      pixels.setPixelColor(54, pixels.Color(0, 150, 0));
       pixels.show();
       break;
 
