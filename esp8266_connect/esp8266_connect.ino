@@ -137,7 +137,7 @@ void Wifi_main() {
         if (debug.available()) {
           if (debug.find("+IPD,")) {
             if (debug.find("mode=")) {
-              Serial.println("****************Switch mode**************");
+              Serial.println(F("****************Switch mode**************"));
               mode = debug.read() - 48;
               Serial.println(mode);
               pixels.clear();
@@ -156,7 +156,7 @@ void Wifi_main() {
 
     case 7://sensor控制
       {
-        Serial.println("~ ~ ~ ~ ~ ~ ~ ~sensor~ ~ ~ ~ ~ ~ ~ ~");
+        Serial.println(F("~ ~ ~ ~ ~ ~ ~ ~sensor~ ~ ~ ~ ~ ~ ~ ~"));
 
         int flexADC = analogRead(FLEX_PIN);
         float flexV = flexADC * VCC / 1023.0;
@@ -167,7 +167,9 @@ void Wifi_main() {
         // bend angle:
         float angle = map(flexR, STRAIGHT_RESISTANCE, BEND_RESISTANCE,
                           0, 90.0);
-        Serial.println("-------------Bend: " + String(angle) + " degrees-------------");
+        Serial.print(F("-------------Bend: "));
+        Serial.print(String(angle));
+        Serial.println(F(" degrees-------------"));
         Serial.println();
         if (angle < 200) {
           Serial.print("no face");
@@ -183,16 +185,21 @@ void Wifi_main() {
 
     case 8://web控制
       {
-        Serial.print("web");
+//        Serial.print("web");
 
         if (debug.available()) {
           if (debug.find("+IPD,")) {
+            Serial.println("Get webpage signal, analyzing...");
             delay(10);
-            debug.read();
-            debug.find("pin=");
+//            debug.read(); // subtract 48 because the read() function returns
+            // the ASCII decimal value and 0 (the first decimal number) starts at 4
+            Serial.println(debug.read());
+            debug.find("pin="); // advance cursor to "pin="
 
             int pinNumber = (debug.read() - 48) * 10; // get first number i.e. if the pin 13 then the 1st number is 1, then multiply to get 10
             pinNumber += (debug.read() - 48); // get second number, i.e. if the pin number is 13 then the 2nd number is 3, then add to the first number
+            
+            Serial.println(pinNumber);
 
             if (pinNumber == 64) {
               pixels.clear();
@@ -211,11 +218,11 @@ void Wifi_main() {
             closeCommand += pinNumber; // append connection id
             closeCommand += "\r\n";
             Serial.print("Turn Pin");
-            Serial.print(pinNumber);
-            Serial.print(":");
-            //          Serial.print(digitalRead(pinNumber));
-            Serial.println("!");
-            sendDebug(closeCommand); // close connection
+            Serial.println(pinNumber);
+            //            Serial.print(":");
+            //            //          Serial.print(digitalRead(pinNumber));
+            //            Serial.println("!");
+            //            sendDebug(closeCommand); // close connection
           }
         }
 
@@ -225,27 +232,6 @@ void Wifi_main() {
   }
 }
 
-void Sensor_mode() {
-  int flexADC = analogRead(FLEX_PIN);
-  float flexV = flexADC * VCC / 1023.0;
-  float flexR = R_DIV * (VCC / flexV - 1.0);
-  Serial.println("Resistance: " + String(flexR) + " ohms");
-
-  // Use the calculated resistance to estimate the sensor's
-  // bend angle:
-  float angle = map(flexR, STRAIGHT_RESISTANCE, BEND_RESISTANCE,
-                    0, 90.0);
-  Serial.println("-------------Bend: " + String(angle) + " degrees-------------");
-  Serial.println();
-  if (angle < 200) {
-    Serial.print("no face");
-    controlLED('0');
-  } else {
-    Serial.print("smile");
-    controlLED('s');
-  }
-  delay(800);
-}
 
 String get_response() {  //get esp responce without "Serial.find()".
   String response = "";
