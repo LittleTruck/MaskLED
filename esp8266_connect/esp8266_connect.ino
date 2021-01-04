@@ -10,9 +10,7 @@
 #define NUMPIXELS 64
 
 Timer t;
-SoftwareSerial debug(3, 2);  // RX, TX // make RX Arduino line is pin 4, make TX Arduino line is pin 5.
-//#define SSID "Galaxy Note10c85a"
-//#define PASS "zcnf8107"
+SoftwareSerial debug(3, 2);
 
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 #define DELAYVAL 500
@@ -46,19 +44,6 @@ void setup() {
 }
 
 void loop() {
-  //  if (debug.available()) {
-  //      Serial.println("****************Switch mode**************");
-  //
-  //      debug.read();
-  //      // the ASCII decimal value and 0 (the first decimal number) starts at 4
-  //      if(debug.find("mode=")){
-  //        sensor = debug.read() - 48;
-  //      }
-  //  }
-  //
-  //  if(senor){
-  //    sen.update();
-  //  }
   t.update();
 }
 
@@ -108,20 +93,14 @@ void Wifi_main() {
     case 3://--------------------------------------------------Get ip address 數據機"http://192.168.0.6:8888/"  手機熱點" http://172.20.10.8:8888/pin="  <=== ip
       {
         sendDebug("AT+CIFSR");
-        //      if (Loding("Get ip address")){ //delay 1 sec
-        Wifi_State++; //next setting wifi mode
-        //      }
-        //      else{Wifi_State--;}
+        Wifi_State++; 
         break;
       }
 
     case 4://--------------------------------------------------configure for multiple connections
       {
         sendDebug("AT+CIPMUX=1");
-        //      if (Loding("Set CIPMUX")){
         Wifi_State++; //next setting wifi mode
-        //      }
-        //      else{Wifi_State--;}
         break;
       }
 
@@ -163,8 +142,6 @@ void Wifi_main() {
         float flexR = R_DIV * (VCC / flexV - 1.0);
         Serial.println("Resistance: " + String(flexR) + " ohms");
 
-        // Use the calculated resistance to estimate the sensor's
-        // bend angle:
         float angle = map(flexR, STRAIGHT_RESISTANCE, BEND_RESISTANCE,
                           0, 90.0);
         Serial.print(F("-------------Bend: "));
@@ -185,14 +162,10 @@ void Wifi_main() {
 
     case 8://web控制
       {
-//        Serial.print("web");
-
         if (debug.available()) {
           if (debug.find("+IPD,")) {
             Serial.println("Get webpage signal, analyzing...");
             delay(10);
-//            debug.read(); // subtract 48 because the read() function returns
-            // the ASCII decimal value and 0 (the first decimal number) starts at 4
             Serial.println(debug.read());
             debug.find("pin="); // advance cursor to "pin="
 
@@ -211,18 +184,11 @@ void Wifi_main() {
             pixels.setPixelColor(pinNumber, pixels.Color(0, 150, 0));
             pixels.show();
 
-            //        digitalWrite(pinNumber, !digitalRead(pinNumber)); // toggle pin
-            // make close command
-
             String closeCommand = "AT+CIPCLOSE=";
             closeCommand += pinNumber; // append connection id
             closeCommand += "\r\n";
             Serial.print("Turn Pin");
             Serial.println(pinNumber);
-            //            Serial.print(":");
-            //            //          Serial.print(digitalRead(pinNumber));
-            //            Serial.println("!");
-            //            sendDebug(closeCommand); // close connection
           }
         }
 
@@ -244,6 +210,7 @@ String get_response() {  //get esp responce without "Serial.find()".
   response.trim();
   return response;
 }
+
 boolean Loding(String state) {
   String response = get_response();
   for (int timeout = 0 ; timeout < 30 ; timeout++)
@@ -275,6 +242,7 @@ boolean Loding(String state) {
     }
   }
 }
+
 void sendDebug(String sent_cmd)
 {
   Serial.print("SEND: ");
@@ -379,27 +347,8 @@ void controlLED(char input)
       pixels.setPixelColor(35, pixels.Color(255, 188, 188));
       pixels.setPixelColor(34, pixels.Color(188, 255, 255));
       pixels.setPixelColor(33, pixels.Color(188, 255, 255));
-
-
-
-
-      //      pixels.setPixelColor(22, pixels.Color(0, 150, 0));
-      //      pixels.setPixelColor(10, pixels.Color(0, 150, 0));
-      //      pixels.setPixelColor(11, pixels.Color(0, 150, 0));
-      //      pixels.setPixelColor(12, pixels.Color(0, 150, 0));
-      //      pixels.setPixelColor(18, pixels.Color(0, 150, 0));
-      //      pixels.setPixelColor(29, pixels.Color(0, 150, 0));
-      //      pixels.setPixelColor(35, pixels.Color(0, 150, 0));
-      //      pixels.setPixelColor(36, pixels.Color(0, 150, 0));
-      //      pixels.setPixelColor(45, pixels.Color(0, 150, 0));
-      //      pixels.setPixelColor(50, pixels.Color(0, 150, 0));
-      //      pixels.setPixelColor(60, pixels.Color(0, 150, 0));
-      //      pixels.setPixelColor(59, pixels.Color(0, 150, 0));
-      //      pixels.setPixelColor(58, pixels.Color(0, 150, 0));
-      //      pixels.setPixelColor(54, pixels.Color(0, 150, 0));
       pixels.show();
       break;
-
 
     default:
       break;
