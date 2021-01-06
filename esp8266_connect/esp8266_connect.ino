@@ -148,7 +148,7 @@ void Wifi_main() {
         Serial.print(String(angle));
         Serial.println(F(" degrees-------------"));
         Serial.println();
-        if (angle < 200) {
+        if (angle < 160) {
           Serial.print("no face");
           controlLED('0');
         } else {
@@ -178,6 +178,26 @@ void Wifi_main() {
               pixels.clear();
               pixels.show();
               Wifi_State -= 2;
+              break;
+            }
+
+             if (pinNumber == 65) {
+              controlLED('c');
+              break;
+            }
+
+             if (pinNumber == 66) {
+              controlLED('h');
+              break;
+            }
+
+            if (pinNumber == 67) {
+              controlLED('f');
+              break;
+            }
+
+            if (pinNumber == 68) {
+              controlLED('a');
               break;
             }
 
@@ -334,7 +354,6 @@ void controlLED(char input)
       break;
 
     case '0':
-
       pixels.setPixelColor(25, pixels.Color(246, 201, 134));
       pixels.setPixelColor(26, pixels.Color(246, 201, 134));
       pixels.setPixelColor(27, pixels.Color(255, 188, 188));
@@ -347,6 +366,75 @@ void controlLED(char input)
       pixels.setPixelColor(35, pixels.Color(255, 188, 188));
       pixels.setPixelColor(34, pixels.Color(188, 255, 255));
       pixels.setPixelColor(33, pixels.Color(188, 255, 255));
+      pixels.show();
+      break;
+
+    case 'h':
+      pixels.setPixelColor(9, pixels.Color(245, 193, 193));
+      pixels.setPixelColor(10, pixels.Color(245, 193, 193));
+      pixels.setPixelColor(20, pixels.Color(245, 193, 193));
+      pixels.setPixelColor(19, pixels.Color(245, 193, 193));
+      pixels.setPixelColor(13, pixels.Color(245, 193, 193));
+      pixels.setPixelColor(14, pixels.Color(245, 193, 193));
+      pixels.setPixelColor(16, pixels.Color(245, 193, 193));
+      pixels.setPixelColor(31, pixels.Color(245, 193, 193));
+      pixels.setPixelColor(33, pixels.Color(245, 193, 193));
+      pixels.setPixelColor(51, pixels.Color(245, 193, 193));
+      pixels.setPixelColor(52, pixels.Color(245, 193, 193));
+      pixels.setPixelColor(42, pixels.Color(245, 193, 193));
+      pixels.setPixelColor(38, pixels.Color(245, 193, 193));
+      pixels.setPixelColor(24, pixels.Color(245, 193, 193));
+      pixels.setPixelColor(33, pixels.Color(245, 193, 193));
+      pixels.show();
+      break;
+
+      
+    case 'c':
+      pixels.setPixelColor(22, pixels.Color(189, 96, 218));
+      pixels.setPixelColor(25, pixels.Color(189, 96, 218));
+      pixels.setPixelColor(10, pixels.Color(189, 96, 218));
+      pixels.setPixelColor(11, pixels.Color(189, 96, 218));
+      pixels.setPixelColor(12, pixels.Color(189, 96, 218));
+      pixels.setPixelColor(18, pixels.Color(189, 96, 218));
+      pixels.setPixelColor(29, pixels.Color(189, 96, 218));
+      pixels.setPixelColor(35, pixels.Color(189, 96, 218));
+      pixels.setPixelColor(36, pixels.Color(189, 96, 218));
+      pixels.setPixelColor(43, pixels.Color(189, 96, 218));
+      pixels.setPixelColor(59, pixels.Color(189, 96, 218));
+      pixels.show();
+      break;
+
+
+    case 'f':
+      pixels.setPixelColor(5, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(4, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(3, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(10, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(12, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(21, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(19, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(26, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(39, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(38, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(37, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(35, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(34, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(33, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(40, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(42, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(44, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(46, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(55, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(53, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(51, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(49, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(56, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(57, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(58, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(59, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(60, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(61, pixels.Color(81, 161, 153));
+      pixels.setPixelColor(62, pixels.Color(81, 161, 153));
       pixels.show();
       break;
 
