@@ -6,7 +6,7 @@ void setup() {
   while (!Serial) {;}
   Serial.println("hardware serial!");
   mySerial.begin(115200);
-  mySerial.println("software seria");
+  mySerial.println("software serial!");
 }
 
 void loop() {
